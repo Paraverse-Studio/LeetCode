@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -25,6 +26,7 @@ public class Program
         ListNode list1 = new ListNode(1);
         list1.next = new ListNode(2);
         list1.next.next = new ListNode(4);
+        list1.next.next.next = list1;
 
         // Define list2: 1 -> 3 -> 4
         ListNode list2 = new ListNode(1);
@@ -49,7 +51,7 @@ public class Program
 
         // 125
         s = "A man, a plan, a canal: Panama";
-        Console.WriteLine(Leetcode.IsPalindrome(s));
+        //Console.WriteLine(Leetcode.IsPalindrome(s));
 
         // 226        
         // Manually creating nodes
@@ -96,7 +98,11 @@ public class Program
         nums = [1, 10, 11, 3, 31, 4, 32, 22, 43, 2];
         //Console.WriteLine($"Contains Duplicate: {Leetcode.ContainsDuplicate(nums)}");
 
+        //Console.WriteLine(Leetcode.LowestCommonAncestor(root, root.left,root.right).val);
 
+        //Console.WriteLine(Leetcode.IsBalanced(root));
+
+        Console.WriteLine(Leetcode.HasCycle(list1));
     }
 }
 
@@ -105,10 +111,73 @@ public class Program
 
 public static class Leetcode
 {
-    //733. Flood Fill
+    //141. Linked List Cycle
+    public static bool HasCycle(ListNode head)
+    {
+        // store nodes as visited
+        // if revisiting, then return false
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null)
+        {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast)
+                return true;
+        }
+        return false;
+    }
+
+    //110. Balanced Binary Tree
+    public static bool IsBalanced(TreeNode root)
+    {
+        return CheckHeight(root) != -1;
+    }
+    public static int CheckHeight(TreeNode node)
+    {
+        if (node == null)
+            return 0;
+
+        // Recursively check the height of the left subtree
+        int left = CheckHeight(node.left);
+        if (left == -1) return -1; // Left subtree is unbalanced
+
+        // Recursively check the height of the right subtree
+        int right = CheckHeight(node.right);
+        if (right == -1) return -1; // Right subtree is unbalanced
+
+        // If the difference in height is more than 1, it;s unbalanced
+        if (Math.Abs(left - right) > 1) return -1;
+
+        // Return the height of the current node
+        return Math.Max(left, right) + 1;
+    }
+
+    //235. Lowest Common Ancestor of a Binary Search Tree
+    public static TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+    {
+        if (root == null || root == p || root == q) 
+            return root;
+
+        // Recurse on left and right subtrees
+        TreeNode left = LowestCommonAncestor(root.left, p, q);
+        TreeNode right = LowestCommonAncestor(root.right, p, q);
+
+        // If both left and right are non-null, current node is the LCA
+        if (left != null && right != null)
+            return root;
+
+        // Otherwise, return the non-null child (either left or right)
+        return left != null ? left: right;
+    }
+
+    //733. Flood Fill -- **
     public static int[][] FloodFill(int[][] image, int sr, int sc, int color)
     {
-
+     
 
         return null;
     }
