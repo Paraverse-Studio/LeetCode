@@ -49,7 +49,7 @@ public class Program
 
         // 125
         s = "A man, a plan, a canal: Panama";
-        Console.WriteLine(Leetcode.IsPalindrome(s));
+        Console.WriteLine(Grind75.IsPalindrome(s));
 
         // 226        
         // Manually creating nodes
@@ -103,7 +103,7 @@ public class Program
 
 
 
-public static class Leetcode
+public static class Grind75
 {
     //733. Flood Fill
     public static int[][] FloodFill(int[][] image, int sr, int sc, int color)
