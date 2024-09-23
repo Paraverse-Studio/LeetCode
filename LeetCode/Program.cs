@@ -26,7 +26,7 @@ public class Program
         ListNode list1 = new ListNode(1);
         list1.next = new ListNode(2);
         list1.next.next = new ListNode(4);
-        list1.next.next.next = list1;
+        list1.next.next.next = new ListNode(5);
 
         // Define list2: 1 -> 3 -> 4
         ListNode list2 = new ListNode(1);
@@ -102,7 +102,26 @@ public class Program
 
         //Console.WriteLine(Leetcode.IsBalanced(root));
 
-        Console.WriteLine(Leetcode.HasCycle(list1));
+        //Console.WriteLine(Leetcode.HasCycle(list1));
+
+        //Console.WriteLine(Leetcode.FirstBadVersion(10));
+
+        string ransomNote = "aa";
+        string magazine = "ab";
+
+        //Console.WriteLine(Leetcode.CanConstruct(ransomNote, magazine));
+
+        //Console.WriteLine(Leetcode.ClimbStairs(4));
+
+        s = "abccccdd";
+
+        //Console.WriteLine(Leetcode.LongestPalindrone(s));
+
+
+        // Define list1: 1 -> 2 -> 3 -> 4 -> 5
+
+        ListNode ll = Leetcode.ReverseList(list1);
+        Leetcode.PrintLinkedList(ll);
     }
 }
 
@@ -111,6 +130,118 @@ public class Program
 
 public static class Leetcode
 {
+    //206. Reverse Linked List
+    public static ListNode ReverseList(ListNode head)
+    {
+        ListNode cur = head;
+        ListNode next = null;
+        ListNode prev = null;
+
+        while (cur != null)
+        {
+            next = cur.next;   // Store the next node
+            cur.next = prev;   // Reverse the current node's pointer
+            prev = cur;        // Move prev to current
+            cur = next;        // Move current to next
+        }
+
+        return prev;
+    }
+
+    //409. Longest Palindrome
+    public static int LongestPalindrone(string s)
+    {
+        HashSet<char> set = new HashSet<char>();
+        int result = 0;
+
+        foreach (char c in s)
+        {
+            if (set.Contains(c))
+            {
+                // When we find a matching pair, increase the length by 2
+                result += 2;
+                set.Remove(c); // Remove the matched pair
+            }
+            else
+            {
+                // Add the unmatched character to the set
+                set.Add(c);
+            }
+        }
+
+        // If there are any unmatched characters left, we can use one in the center of the palindrome
+        return set.Count > 0 ? result + 1 : result;
+    }
+
+    //70. Climbing Stairs
+    public static int ClimbStairs(int n)
+    {
+        return ClimbStairsRecursion(n, new Dictionary<int, int>());
+    }
+    public static int ClimbStairsRecursion(int n, Dictionary<int, int> dp)
+    {
+        if (dp.ContainsKey(n)) return dp[n];
+        if (n <= 1) return 1;
+        var result = ClimbStairsRecursion(n - 1, dp) + ClimbStairsRecursion(n - 2, dp);
+        dp.Add(n, result);
+        return result;
+    }
+
+    //383. Ransom Note
+    public static bool CanConstruct(string ransomNote, string magazine)
+    {
+        // use hash table to store each character in ransomNote
+        // as we iterate through a for loop of ransomNote string
+        // we add the char and its count, remove the char and count
+        // if it is in magazine
+        // at the end return mapper.Count == 0; 
+        // if count is 0 return true, else false
+        int[] charCount = new int[26];
+
+        foreach (char c in magazine)
+        {
+            charCount[c - 'a']++;
+        }
+
+        foreach (char c in ransomNote)
+        {
+            charCount[c - 'a']--;
+
+            if (charCount[c - 'a'] < 0)
+                return false;
+        }
+
+        return true;
+    }
+
+    //278. First Bad Version
+    public static int FirstBadVersion(int n)
+    {
+        int l = 1;
+        int r = n;
+
+        while (l < r)
+        {
+            int mid = l + (r - l) / 2;
+
+            if (IsBadVersion(mid))
+                r = mid;
+            else
+                l = mid + 1;
+        }
+
+        return l;
+    }
+    // Helper method
+    private static bool IsBadVersion(int version)
+    {
+        Console.WriteLine("Api Call");
+        if (version == 8 || version == 9 || version == 10)
+            return true;
+
+        return false;
+    }
+
     //141. Linked List Cycle
     public static bool HasCycle(ListNode head)
     {
