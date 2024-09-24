@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -120,16 +121,58 @@ public class Program
 
         // Define list1: 1 -> 2 -> 3 -> 4 -> 5
 
-        ListNode ll = Leetcode.ReverseList(list1);
-        Leetcode.PrintLinkedList(ll);
+        //ListNode ll = Leetcode.ReverseList(list1);
+        //Leetcode.PrintLinkedList(ll);
+
+        // Merge Sort
+        //Console.WriteLine(Helper.PrintArrayElements(nums));
+        //Sorting.MergeSort(nums);
+        //Console.WriteLine(Helper.PrintArrayElements(nums));
+
+
     }
 }
 
 
 
-
 public static class Leetcode
 {
+
+
+    public static int Addition(int a, int b, out int carry)
+    {
+        if (a == 0 && b == 0)
+        {
+            carry = 0;
+            return 0;
+        }
+        else if (a == 1 && b == 0 || a == 0 && b == 1)
+        {
+            carry = 0;
+            return 1;
+        }
+        else
+        {
+            carry = 1;
+            return 0;
+        }
+    }
+
+    //169. Majority Element
+    public static int MajorityElement(int[] nums)
+    {
+        int candidate = 0;
+        int count = 0;
+
+        foreach (int num in nums)
+        {
+            if (count == 0)
+                candidate = num;
+            count += (candidate == num) ? 1 : -1;
+        }
+        return candidate;
+    }
+
     //206. Reverse Linked List
     public static ListNode ReverseList(ListNode head)
     {
@@ -579,53 +622,72 @@ public static class Leetcode
 
         return longest;
     }
+}
 
-    #region Helper Methods
-    // Helpers
-    public static void PrintLinkedList(ListNode head)
+public static class Sorting
+{
+    public static void MergeSort(int[] array)
     {
-        ListNode current = head;
-        while (current != null)
+        int length = array.Length;
+        if (length <= 1) return; // base case
+
+        int middle = length / 2;
+        int[] left = new int[middle];
+        int[] right = new int[length - middle];
+
+        int i = 0, j = 0;
+
+        for (; i < length; i++)
         {
-            Console.Write(current.val + " -> ");
-            current = current.next;
+            if (i < middle)
+            {
+                left[i] = array[i];
+            }
+            else
+            {
+                right[j] = array[i];
+                j++;
+            }
         }
-        Console.WriteLine("null");
+        MergeSort(left);
+        MergeSort(right);
+        Merge(left, right, array);
     }
 
-    public static string PrintBinaryTree(TreeNode root)
+    private static void Merge(int[] left, int[] right, int[] array)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.Append(TraverseTree(root));
+        int leftSize = array.Length / 2;
+        int rightSize = array.Length - leftSize;
+        int i = 0, l = 0, r = 0;
 
-        return sb.ToString();
+        while (l < leftSize && r < rightSize)
+        {
+            if (left[l] < right[r])
+            {
+                array[i] = left[l];
+                i++;
+                l++;
+            }
+            else
+            {
+                array[i] = right[r];
+                i++;
+                r++;
+            }
+        }
+        while (l < leftSize)
+        {
+            array[i] = left[l];
+            i++;
+            l++;
+        }
+        while (r < rightSize)
+        {
+            array[i] = right[r];
+            i++;
+            r++;
+        }
     }
-
-    public static string TraverseTree(TreeNode node)
-    {
-        if (node == null)
-            return string.Empty;
-
-        StringBuilder sb = new StringBuilder();
-        // Inorder Traversal: Left -> Root -> Right
-        //sb.Append(TraverseTree(node.left));
-        //sb.Append(node.val + " ");
-        //sb.Append(TraverseTree(node.right));
-
-        // Postorder Traversal: Left -> Right -> Root
-        //sb.Append(TraverseTree(node.left));
-        //sb.Append(TraverseTree(node.right));
-        //sb.Append(node.val + " ");
-
-        // Preorder Traversal: Root -> Left -> Right
-        sb.Append(node.val + " ");
-        sb.Append(TraverseTree(node.left));
-        sb.Append(TraverseTree(node.right));
-
-        return sb.ToString();
-    }
-
-    #endregion
 }
 
 //232. Implement Queue using Stacks
@@ -698,5 +760,64 @@ public class TreeNode
         this.val = val;
         this.left = left;
         this.right = right;
+    }
+}
+
+public class Helper
+{
+    // Helpers
+    public static void PrintLinkedList(ListNode head)
+    {
+        ListNode current = head;
+        while (current != null)
+        {
+            Console.Write(current.val + " -> ");
+            current = current.next;
+        }
+        Console.WriteLine("null");
+    }
+
+    public static string PrintBinaryTree(TreeNode root)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append(TraverseTree(root));
+
+        return sb.ToString();
+    }
+
+    public static string TraverseTree(TreeNode node)
+    {
+        if (node == null)
+            return string.Empty;
+
+        StringBuilder sb = new StringBuilder();
+        // Inorder Traversal: Left -> Root -> Right
+        //sb.Append(TraverseTree(node.left));
+        //sb.Append(node.val + " ");
+        //sb.Append(TraverseTree(node.right));
+
+        // Postorder Traversal: Left -> Right -> Root
+        //sb.Append(TraverseTree(node.left));
+        //sb.Append(TraverseTree(node.right));
+        //sb.Append(node.val + " ");
+
+        // Preorder Traversal: Root -> Left -> Right
+        sb.Append(node.val + " ");
+        sb.Append(TraverseTree(node.left));
+        sb.Append(TraverseTree(node.right));
+
+        return sb.ToString();
+    }
+
+    public static string PrintArrayElements<T>(T[] array)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        foreach (T e in array)
+        {
+            sb.Append($"{e}, ");
+        }
+
+        return sb.ToString();
     }
 }
