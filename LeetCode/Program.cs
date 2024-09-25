@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
@@ -78,6 +79,8 @@ public class Program
         //Console.WriteLine("Right Child of Node 2: " + root.left.right.val);
         //Console.WriteLine("Right Child of Node 3: " + root.right.right.val);
         //Console.WriteLine(LeetCode.InvertTree(root));
+        //Console.WriteLine("Longest: " + Leetcode.DiameterOfBinaryTree(root));
+        Console.WriteLine("Depth: " + Leetcode.MaxDepth(root));
 
 
         //Console.WriteLine($"Start Tree Nodes: {Leetcode.PrintTreeNodes(root)}");
@@ -137,25 +140,52 @@ public class Program
 
 public static class Leetcode
 {
-
-
-    public static int Addition(int a, int b, out int carry)
+    //104. Maximum Depth of Binary Tree
+    public static int MaxDepth(TreeNode root)
     {
-        if (a == 0 && b == 0)
+        // If the root is null, the tree has no depth
+        if (root == null) return 0;
+
+        // Recursively calculate the depth of left and right subtrees
+        int left = MaxDepth(root.left);
+        int right = MaxDepth(root.right);
+
+        // Return the maximum depth of the two subtrees, adding 1 for the current node
+        return Math.Max(left, right) + 1;
+    }
+
+    //876. Middle of the Linked List
+    public static ListNode MiddleNode(ListNode head)
+    {
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null)
         {
-            carry = 0;
-            return 0;
+            slow = slow.next;
+            fast = fast.next.next;
         }
-        else if (a == 1 && b == 0 || a == 0 && b == 1)
-        {
-            carry = 0;
-            return 1;
-        }
-        else
-        {
-            carry = 1;
-            return 0;
-        }
+        return slow;
+    }
+
+    //543. Diameter of Binary Tree
+    public static int DiameterOfBinaryTree(TreeNode root)
+    {
+        int diameter = 0;
+        Depth(root, ref diameter);
+        return diameter;
+    }
+
+    private static int Depth(TreeNode node, ref int diameter)
+    {
+        if (node == null) return 0;
+
+        int left = Depth(node.left, ref diameter);
+        int right = Depth(node.right, ref diameter);
+
+        diameter = Math.Max(diameter, left+right);
+
+        return Math.Max(left, right) + 1;
     }
 
     //169. Majority Element
@@ -323,7 +353,7 @@ public static class Leetcode
         int right = CheckHeight(node.right);
         if (right == -1) return -1; // Right subtree is unbalanced
 
-        // If the difference in height is more than 1, it;s unbalanced
+        // If the difference in height is more than 1, it's unbalanced
         if (Math.Abs(left - right) > 1) return -1;
 
         // Return the height of the current node
