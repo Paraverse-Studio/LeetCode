@@ -140,6 +140,20 @@ public class Program
 
 public static class Leetcode
 {
+    //53. Maximum Subarray
+    public static int MaxSubArray(int[] nums)
+    {
+        int sum = nums[0];
+        int result = sum;
+
+        for (int i = 1; i < nums.Length; i++)
+        {
+            sum = Math.Max(nums[i], sum + nums[i]);
+            result = Math.Max(result, sum);
+        }
+        return result;
+    }
+
     //104. Maximum Depth of Binary Tree
     public static int MaxDepth(TreeNode root)
     {
