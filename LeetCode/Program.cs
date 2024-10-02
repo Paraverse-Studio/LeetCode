@@ -67,6 +67,18 @@ public class Program
 
 public static class Leetcode
 {
+    //167. Two Sum II - Input Array Is Sorted
+    public static int[] TwoSum(int[] numbers, int target)
+    {
+        return new int[] { -1 };
+    }
+
+    //162. Find Peak Element
+    public static int FindPeakElement(int[] nums)
+    {
+        return -1;
+    }
+
     //153. Find Minimum in Rotated Sorted Array
     public static int FindMin(int[] nums)
     {
