@@ -67,6 +67,12 @@ public class Program
 
 public static class Leetcode
 {
+    //209. Minimum Size Subarray Sum
+    public static int MinSubArrayLen(int target, int[] nums)
+    {
+        return -1;
+    }
+
     //167. Two Sum II - Input Array Is Sorted
     public static int[] TwoSum(int[] numbers, int target)
     {
