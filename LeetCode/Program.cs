@@ -3,27 +3,17 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
+using System.Security.AccessControl;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Xml.Schema;
 
 public class Program
 {
     public static void Main()
     {
-        // 594
-        int[] array = { 1, 3, 2, 2, 5, 2, 3, 7 };
-        //Console.WriteLine(LeetCode.FindLHS(array));
 
-        // 441
-        int num = 8;
-        //Console.WriteLine(LeetCode.ArrangeCoins(num));
-
-        // 20
-        string s = "{}()[()[]{{}}[]]";
-        //Console.WriteLine(LeetCode.IsValid(s));
-
-        // 21
         // Define list1: 1 -> 2 -> 4
         ListNode list1 = new ListNode(1);
         list1.next = new ListNode(2);
@@ -42,20 +32,6 @@ public class Program
         //Console.WriteLine("List 2:");
         //LeetCode.PrintList(list2);
 
-        // Merge the two lists and print the result
-        //ListNode mergedList = LeetCode.MergeTwoLists(list1, list2);
-        //Console.WriteLine("Merged List:");
-        //LeetCode.PrintList(mergedList);
-        
-        // 121
-        int[] prices = { 7,6,5,4,3,1 };
-        //Console.WriteLine(LeetCode.MaxProfit(prices));
-
-        // 125
-        s = "A man, a plan, a canal: Panama";
-        //Console.WriteLine(Leetcode.IsPalindrome(s));
-
-        // 226        
         // Manually creating nodes
         TreeNode root = new TreeNode(1);  // Root node with value 1
         root.left = new TreeNode(2);      // Left child of root with value 2
@@ -78,61 +54,12 @@ public class Program
         //Console.WriteLine("Left Child of Node 2: " + root.left.left.val);
         //Console.WriteLine("Right Child of Node 2: " + root.left.right.val);
         //Console.WriteLine("Right Child of Node 3: " + root.right.right.val);
-        //Console.WriteLine(LeetCode.InvertTree(root));
-        //Console.WriteLine("Longest: " + Leetcode.DiameterOfBinaryTree(root));
-        Console.WriteLine("Depth: " + Leetcode.MaxDepth(root));
-
-
         //Console.WriteLine($"Start Tree Nodes: {Leetcode.PrintTreeNodes(root)}");
-        //TreeNode result = Leetcode.InvertTree(root);
-        //Console.WriteLine($"Inverted Tree Nodes: {Leetcode.PrintTreeNodes(result)}");
 
-
-        // 242
-        s = "anagram";
-        string t = "nagaram";
-        //Console.WriteLine($"Anagram test: {Leetcode.IsAnagram(s,t)}");
-
-        // 704
         int[] nums = { 1, 2, 3, 4, 5, 6, 7, 8 };
         int target = 1;
-        //Console.WriteLine($"Binary Search: Target {target} was found at index {Leetcode.BinarySearch(nums, target)}");
 
-        // 242
-        nums = [1, 10, 11, 3, 31, 4, 32, 22, 43, 2];
-        //Console.WriteLine($"Contains Duplicate: {Leetcode.ContainsDuplicate(nums)}");
-
-        //Console.WriteLine(Leetcode.LowestCommonAncestor(root, root.left,root.right).val);
-
-        //Console.WriteLine(Leetcode.IsBalanced(root));
-
-        //Console.WriteLine(Leetcode.HasCycle(list1));
-
-        //Console.WriteLine(Leetcode.FirstBadVersion(10));
-
-        string ransomNote = "aa";
-        string magazine = "ab";
-
-        //Console.WriteLine(Leetcode.CanConstruct(ransomNote, magazine));
-
-        //Console.WriteLine(Leetcode.ClimbStairs(4));
-
-        s = "abccccdd";
-
-        //Console.WriteLine(Leetcode.LongestPalindrone(s));
-
-
-        // Define list1: 1 -> 2 -> 3 -> 4 -> 5
-
-        //ListNode ll = Leetcode.ReverseList(list1);
-        //Leetcode.PrintLinkedList(ll);
-
-        // Merge Sort
-        //Console.WriteLine(Helper.PrintArrayElements(nums));
-        //Sorting.MergeSort(nums);
-        //Console.WriteLine(Helper.PrintArrayElements(nums));
-
-
+        Console.WriteLine(Leetcode.mySqrt(8));
     }
 }
 
@@ -140,6 +67,122 @@ public class Program
 
 public static class Leetcode
 {
+    //153. Find Minimum in Rotated Sorted Array
+    public static int FindMin(int[] nums)
+    {
+        return -1;
+    }
+
+    //81. Search in Rotated Sorted Array II
+    public static bool Search(int[] nums, int target)
+    {
+        return false;
+    }
+
+    //69. Sqrt(x)
+    public static int mySqrt(int x)
+    {
+        if (x == 0 || x == 1) return x;
+
+        int l = 1, r = x, result = 0;
+
+        while (l <= r)
+        {
+            int mid = l + (r - l) / 2;
+
+            if (mid <= x / mid)
+            {
+                result = mid;
+                l = mid + 1;        // Look for a larger value
+            }
+            else
+            {
+                r = mid - 1;        // Look for a smaller value
+            }
+        }
+        return result;
+    }
+
+    //35. Search Insert Positon
+    public static int SearchInsert(int[] nums, int target)
+    {
+        int l = 0, r = nums.Length - 1, idx = -1;
+
+        while (l <= r)
+        {
+            int mid = l + (r - l) / 2;
+
+            if (nums[mid] == target)
+                return mid;
+            else if (nums[mid] < target)
+                l = mid + 1;
+            else
+                r = mid - 1;
+        }
+
+        return l;
+    }
+
+    //34. Find First and Last Position of Element in Sorted Array
+    public static int[] SearchRange(int[] nums, int target)
+    {
+        int left = FindFirst(nums, target);              // Find the first occurrence of the target.
+        int right = FindLast(nums, target);            // Find the last occurrence of the target.
+        return new int[] { left, right };               // Return the result as an array.
+    }
+    private static int FindFirst(int[] nums, int target)
+    {
+        int l = 0, r = nums.Length - 1, first = -1;     // Calculate the middle index.
+
+        while (l <= r)
+        {
+            int mid = l + (r - l) / 2;
+
+            // Get the left most index
+            if (nums[mid] == target)
+            {
+                first = mid;                            // Update first occurrence.
+                r = mid - 1;                            // Move the right pointer to the left to search in the left half.
+            }
+            else if (nums[mid] < target)
+            {
+                l = mid + 1;                            // If mid element is less than target, move the left pointer to the right.
+            }
+            else
+            {
+                r = mid - 1;
+            }
+        }
+
+        return first;
+    }
+    private static int FindLast(int[] nums, int target)
+    {
+        int l = 0, r = nums.Length - 1, last = -1;
+
+        while (l <= r)
+        {
+            int mid = l + (r - l) / 2;
+
+            // Get the right most index
+            if (nums[mid] == target)
+            {
+                last = mid;
+                l = mid + 1;
+            }
+            else if (nums[mid] < target)
+            {
+                l = mid + 1;
+            }
+            else
+            {
+                r = mid - 1;
+            }
+        }
+
+        return last;
+    }
+
     //53. Maximum Subarray
     public static int MaxSubArray(int[] nums)
     {
