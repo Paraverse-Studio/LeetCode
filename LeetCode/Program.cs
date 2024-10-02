@@ -67,6 +67,12 @@ public class Program
 
 public static class Leetcode
 {
+    //222. Count Complete Tree Nodes
+    public static int CountNodes(TreeNode root)
+    {
+        return -1;
+    }
+
     //209. Minimum Size Subarray Sum
     public static int MinSubArrayLen(int target, int[] nums)
     {
